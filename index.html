@@ -148,7 +148,7 @@
             letter-spacing: 0.5px;
         }
 
-        /* 大二维码容器 */
+        /* 中间大二维码容器 */
         .qr-box {
             border: 1px solid #F2F2F7;
             border-radius: 20px;
@@ -177,12 +177,12 @@
             padding: 0 10px;
         }
 
-        /* 底部 imToken 栏 */
+        /* ===== 底部 imToken 栏 (高精度复刻) ===== */
         .footer-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 10px 10px 15px;
+            padding: 0 12px 8px 16px; /* 微调内边距 */
             color: #fff;
         }
 
@@ -191,30 +191,33 @@
             align-items: center;
         }
 
+        /* 完美还原的 imToken 专属实心 Logo */
         .footer-logo {
-            width: 36px;
-            height: 36px;
-            margin-right: 12px;
+            width: 38px;
+            height: 38px;
+            margin-right: 10px;
             fill: #fff;
         }
 
         .footer-text h4 {
             font-size: 20px;
             font-weight: 500;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
             letter-spacing: 0.5px;
+            line-height: 1.2;
         }
 
         .footer-text p {
             font-size: 14px;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.85); /* 稍微提亮一点文字 */
             letter-spacing: 0.5px;
+            line-height: 1.2;
         }
 
-        /* 右下角小二维码外框 (固定不变) */
+        /* 右下角小二维码外框 */
         .footer-qr {
             background: #fff;
-            padding: 4px;
+            padding: 3px; /* 减少白边留白 */
             border-radius: 8px;
             width: 54px;
             height: 54px;
@@ -227,7 +230,7 @@
             width: 100%;
             height: 100%;
             display: block;
-            border-radius: 4px;
+            border-radius: 5px; /* 内部二维码圆角 */
         }
     </style>
 </head>
@@ -274,8 +277,9 @@
         <!-- 底部 imToken 栏 -->
         <div class="footer-bar">
             <div class="footer-left">
-                <svg class="footer-logo" viewBox="0 0 100 100">
-                    <path d="M 45,15 C 30,15 15,30 15,50 C 15,70 30,85 50,85 C 70,85 85,70 85,50 C 85,38 78,28 68,22 C 72,28 75,35 75,45 C 75,60 63,72 48,72 C 33,72 25,60 25,45 C 25,30 35,25 45,15 Z"/>
+                <!-- imToken 官方标准矢量图标 (实心、带缺口) -->
+                <svg class="footer-logo" viewBox="0 0 1024 1024">
+                    <path d="M510.1 168.3c-13.8-16.2-32.8-24.5-52.5-24.5-28.9 0-54.3 16.3-67.1 43.2-13.5 28.3-9.2 60.9 11.3 84.5l133.9 154c20.3 23.4 48.1 36.5 78 36.5 59.1 0 107-48 107-107 0-17-4.2-33.4-11.7-47.8-8-15.3-19.6-28.6-33.6-38.4L510.1 168.3zM248.5 502.2c-49.5 0-91.4 31.9-105.6 75.8-4.8 14.7-7.4 30.3-7.4 46.5 0 81.3 65.9 147.2 147.2 147.2h397c88.5 0 160.2-71.7 160.2-160.2 0-86.2-68.1-156.7-153.3-160v0.1H248.5z"/>
                 </svg>
                 <div class="footer-text">
                     <h4>imToken</h4>
@@ -283,10 +287,10 @@
                 </div>
             </div>
             
-            <!-- 右下角小二维码 (写死，固定不变) -->
+            <!-- 右下角小二维码 (固定，一比一底板大小) -->
             <div class="footer-qr">
-                <!-- 这里放了一张 imToken 官方二维码，也可以用您自己固定的二维码图片替换 src 里的链接 -->
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://token.im" alt="固定二维码">
+                <!-- 使用高清固定的官方链接二维码占位 -->
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://token.im&margin=0" alt="固定二维码">
             </div>
         </div>
     </div>
@@ -331,14 +335,14 @@
             saveBtn.disabled = true;
 
             html2canvas(cardCapture, {
-                scale: 4, // 4倍高清
+                scale: 4, // 4倍极高分辨率
                 useCORS: true,
                 backgroundColor: null, 
                 logging: false
             }).then(canvas => {
                 const imgData = canvas.toDataURL('image/png');
                 const link = document.createElement('a');
-                link.download = 'Tron_收款卡片.png';
+                link.download = 'Tron_收款卡片_完美版.png';
                 link.href = imgData;
                 link.click();
 
