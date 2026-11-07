@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>imToken 终极完美复刻</title>
+    <title>imToken 完美复刻生成器</title>
+    <!-- 引入二维码生成库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-    <!-- 更换为渲染精度更高的 html-to-image -->
+    <!-- 引入更稳定的截图库 html-to-image -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js"></script>
     <style>
         :root {
-            --theme-blue: #007AFF; /* 精准的苹果蓝 */
+            --theme-blue: #007AFF; /* 原图取色 */
             --card-bg: #ffffff;
             --text-main: #1A1A1A;
             --text-sub: #8E8E93;
@@ -46,7 +47,7 @@
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-size: 13px; color: #555; margin-bottom: 6px; font-weight: 500; }
         .form-group input {
-            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none;
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; outline: none; transition: border 0.2s;
         }
         .form-group input:focus { border-color: var(--theme-blue); }
 
@@ -57,19 +58,22 @@
         }
         .save-btn:active { opacity: 0.8; }
 
-        /* ===== 核心卡片区域 ===== */
+        /* ===== 核心卡片区域 (截图目标) ===== */
         .card-wrapper {
             background-color: var(--theme-blue);
-            width: 100%; max-width: 400px; border-radius: 20px;
-            padding: 16px; /* 蓝色外框的厚度 */
+            width: 100%; max-width: 400px; 
+            border-radius: 24px;
+            padding: 16px; /* 蓝色外框厚度 */
             position: relative;
         }
 
         .white-card {
-            background-color: var(--card-bg); border-radius: 16px;
-            padding: 32px 20px 24px; /* 内部白卡的边距 */
-            text-align: center; display: flex; flex-direction: column; align-items: center;
-            margin-bottom: 20px; /* 白卡与底部蓝区的间距 */
+            background-color: var(--card-bg); 
+            border-radius: 16px;
+            padding: 32px 20px 24px; 
+            text-align: center; 
+            display: flex; flex-direction: column; align-items: center;
+            margin-bottom: 20px; 
         }
 
         .tron-badge {
@@ -83,7 +87,7 @@
         .tron-icon svg { width: 10px; height: 10px; fill: white; }
         .tron-badge span { font-size: 15px; color: var(--text-main); font-weight: 500; }
 
-        .subtitle { font-size: 15px; color: var(--text-sub); margin-bottom: 24px; }
+        .subtitle { font-size: 15px; color: var(--text-sub); margin-bottom: 24px; letter-spacing: 0.5px; }
 
         .qr-box {
             border: 1px solid #F2F2F7; border-radius: 16px; padding: 12px;
@@ -92,35 +96,36 @@
         }
 
         .address-label { font-size: 14px; color: var(--text-sub); margin-bottom: 8px; }
-        .address-text { font-size: 16px; color: var(--text-main); font-weight: 600; word-break: break-all; line-height: 1.5; }
+        .address-text { font-size: 16px; color: var(--text-main); font-weight: 600; word-break: break-all; line-height: 1.5; padding: 0 10px;}
 
-        /* ===== 底部 imToken 栏 ===== */
+        /* ===== 底部 imToken 栏 (100% 还原) ===== */
         .footer-bar {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 0 12px 8px 12px; color: #fff;
+            padding: 0 10px 6px 14px; 
         }
 
-        .footer-left { display: flex; align-items: center; gap: 10px; }
+        .footer-left { display: flex; align-items: center; }
 
-        /* 使用极其精准的底栏纯白矢量图 */
+        /* 使用 Base64 图片，彻底解决 SVG 截图变形问题 */
         .footer-logo {
-            width: 34px; height: 34px; fill: #ffffff;
-            /* 强制精准渲染，防止截图插件糊掉 */
-            shape-rendering: geometricPrecision; 
+            width: 36px; height: 36px; margin-right: 12px;
+            object-fit: contain;
         }
 
-        .footer-text h4 { font-size: 18px; font-weight: 500; margin-bottom: 2px; }
-        .footer-text p { font-size: 12px; color: rgba(255, 255, 255, 0.85); }
+        .footer-text h4 { font-size: 19px; font-weight: 500; color: #fff; margin-bottom: 2px; line-height: 1.2; letter-spacing: 0.5px;}
+        .footer-text p { font-size: 13px; color: rgba(255, 255, 255, 0.85); line-height: 1.2; letter-spacing: 0.5px;}
 
+        /* 右下角二维码 */
         .footer-qr {
-            background: #fff; padding: 2px; border-radius: 6px; width: 46px; height: 46px;
+            background: #fff; padding: 3px; border-radius: 8px; width: 52px; height: 52px;
             display: flex; justify-content: center; align-items: center;
         }
-        .footer-qr img { width: 100%; height: 100%; display: block; border-radius: 4px; }
+        .footer-qr img { width: 100%; height: 100%; display: block; border-radius: 5px; }
     </style>
 </head>
 <body>
 
+    <!-- 控制面板 -->
     <div class="control-panel">
         <div class="form-group">
             <label>二维码内容 (输入您的支付网址)</label>
@@ -133,7 +138,7 @@
         <button class="save-btn" id="saveBtn">保存为高清图片</button>
     </div>
 
-    <!-- 截图区域 -->
+    <!-- 卡片渲染区 -->
     <div class="card-wrapper" id="cardCapture">
         <div class="white-card">
             <div class="tron-badge">
@@ -143,22 +148,25 @@
                 <span>Tron</span>
             </div>
             <p class="subtitle">仅支持 Tron 资产 (TRC10/TRC20)</p>
+            
             <div class="qr-box" id="mainQrContainer"></div>
+            
             <p class="address-label">钱包地址</p>
             <p class="address-text" id="displayAddress">TLsgrS8KPwtmVWx3YZiWQ5hcRRUfkxGBo1</p>
         </div>
 
         <div class="footer-bar">
             <div class="footer-left">
-                <!-- 极其精准的 imToken 官方 Logo 路径 -->
-             <img src="logo.png" style="width: 34px; height: 34px; object-fit: contain;" alt="logo">
-             <div class="footer-text">
+                <!-- 直接将完美的纯白 Logo 以 Base64 形式内嵌 -->
+                <img class="footer-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDI0IDEwMjQiPjxwYXRoIGZpbGw9IiNmZmZmZmYiIGQ9Ik04NTkuNyA2MDYuN2MtNDQuOSA3Ny43LTEyMC4yIDEzMC4xLTIwNi4xIDE0NS42LTM2LjUgNi42LTczLjIgOS4yLTEwOS4xIDcuOC0yNTItOS44LTQ0Ny40LTIxMC40LTQ1MS42LTQ2Mi40LTQuMi0yNTIuMyAyMDcuNi00NTMuMyA0NTkuMi00NDUuNCA2MC42IDEuOSAxMTkuNCAxNS4zIDE3My42IDM5LjIgMjIuNSAxMC4xIDQ0LjMgMjIuMSA2NC42IDM1LjggMjEuNyAxNC42IDQxLjggMzEuNyA1OS45IDUxLjIgMTguNSAyMC4xIDM0LjcgNDIuNiA0OC4yIDY3LjEgMTEuMyAyMC40IDE5LjMgNDIuMyAyMy43IDY1LjIgNC42IDI0LjEgNS40IDQ4LjggMi4zIDczLjEtNS45IDQ2LjItMzAuNiA4Ny41LTY3LjQgMTEzLjItMjMuOSAxNi43LTUyLjQgMjUuOS04MS4yIDI1LjktMTguOSAwLTM3LjQtNC4yLTU0LjQtMTIuMy0xNS4xLTcuMi0yOC4yLTE3LjktMzcuOS0zMS4yLTUuNi03LjYtMTIuMy0xNC4xLTIwLjQtMTguOS0xMi40LTcuNC0yNi4xLTEwLjgtNDAuMi0xMC4xLTE4LjIgMC45LTM1LjIgOC4yLTQ4LjQgMjAuNS0xNy4xIDE1LjktMjYuNyAzOC44LTI2LjcgNjIuOCAwIDUwLjYgNDEuMSA5MS42IDkxLjcgOTEuNiAxOS44IDAgMzguNy02LjMgNTQuNC0xOC4ybDE1LjUgMTguN2MzLjYgNC4zIDguMyA3LjUgMTMuNSA5LjIgNS4xIDEuNyAxMC42IDIuMSAxNS45IDEuMiA2LjItMS4xIDEyLTQuMyAxNi4yLTkuMiA0LjMtNC45IDYuNy0xMS4yIDYuNy0xNy44IDAtOS45LTYuNC0xOC41LTE1LjctMjEuNy00LjgtMS42LTkuMS00LjYtMTIuNC04LjYtMy44LTQuNi02LjItMTAuMy02LjItMTYuNCAwLTE0IDEyLjQtMjUuMiAyNy4yLTI1LjIgMTQuOCAwIDI3LjIgMTEuMiAyNy4yIDI1LjIgMCA2LjItMi40IDExLjgtNi4yIDE2LjRsLTE1LjUgMTguN2MxMS4xIDguNSAyNC4yIDEzLjUgMzcuOSAxMy41IDIyLjcgMCA0My4xLTEyLjIgNTQuNy0zMS40IDExLjUtMTkuMiAxMS41LTQyLjkgMC02Mi4xLTE1LjItMjUuMy00Mi41LTQwLjgtNzEuNy00MC44LTE5LjggMC0zOC43IDYuMy01NC40IDE4LjJsLTE1LjUtMTguN2MtMy42LTQuMy04LjMtNy41LTEzLjUtOS4yLTUuMS0xLjctMTAuNi0yLjEtMTUuOS0xLjItNi4yIDEuMS0xMiA0LjMtMTYuMiA5LjItNC4zIDQuOS02LjcgMTEuMi02LjcgMTcuOCAwIDkuOSA2LjQgMTguNSAxNS43IDIxLjcgNC44IDEuNiA5LjEgNC42IDEyLjQgOC42IDMuOCA0LjYgNi4yIDEwLjMgNi4yIDE2LjQgMCAxNC0xMi40IDI1LjItMjcuMiAyNS4yLTE0LjggMC0yNy4yLTExLjItMjcuMi0yNS4yIDAtNi4yIDIuNC0xMS44IDYuMi0xNi40bDE1LjUtMTguN2MtMTEuMS04LjUtMjQuMi0xMy41LTM3LjktMTMuNS0yMi43IDAtNDMuMSAxMi4yLTU0LjcgMzEuNC0xMS41IDE5LjItMTEuNSA0Mi45IDAgNjIuMSAxNS4yIDI1LjMgNDIuNSA0MC44IDcxLjcgNDAuOCAxOS44IDAgMzguNy02LjMgNTQuNC0xOC4ybDE1LjUgMTguN2MzLjYgNC4zIDguMyA3LjUgMTMuNSA5LjIgNS4xIDEuNyAxMC42IDIuMSAxNS45IDEuMiA2LjItMS4xIDEyLTQuMyAxNi4yLTkuMiA0LjMtNC45IDYuNy0xMS4yIDYuNy0xNy44IDAtOS45LTYuNC0xOC41LTE1LjctMjEuNy00LjgtMS42LTkuMS00LjYtMTIuNC04LjYtMy44LTQuNi02LjItMTAuMy02LjItMTYuNCAwLTE0IDEyLjQtMjUuMiAyNy4yLTI1LjIgMTQuOCAwIDI3LjIgMTEuMiAyNy4yIDI1LjIgMCA2LjItMi40IDExLjgtNi4yIDE2LjRsLTE1LjUgMTguN2MxMS4xIDguNSAyNC4yIDEzLjUgMzcuOSAxMy41IDIyLjcgMCA0My4xLTEyLjIgNTQuNy0zMS40IDExLjUtMTkuMiAxMS41LTQyLjkgMC02Mi4xLTE1LjItMjUuMy00Mi41LTQwLjgtNzEuNy00MC44LTE5LjggMC0zOC43IDYuMy01NC40IDE4LjJsLTE1LjUtMTguN2MtMy42LTQuMy04LjMtNy41LTEzLjUtOS4yLTUuMS0xLjctMTAuNi0yLjEtMTUuOS0xLjItNi4yIDEuMS0xMiA0LjMtMTYuMiA5LjItNC4zIDQuOS02LjcgMTEuMi02LjcgMTcuOCAwIDkuOSA2LjQgMTguNSAxNS43IDIxLjcgNC44IDEuNiA5LjEgNC42IDEyLjQgOC42IDMuOCA0LjYgNi4yIDEwLjMgNi4yIDE2LjQgMCAxNC0xMi40IDI1LjItMjcuMiAyNS4yLTE0LjggMC0yNy4yLTExLjItMjcuMi0yNS4yIDAtNi4yIDIuNC0xMS44IDYuMi0xNi40bDE1LjUtMTguN2MtMTEuMS04LjUtMjQuMi0xMy41LTM3LjktMTMuNS0yMi43IDAtNDMuMSAxMi4yLTU0LjcgMzEuNC0xMS41IDE5LjItMTEuNSA0Mi45IDAgNjIuMSAxNS4yIDI1LjMgNDIuNSA0MC44IDcxLjcgNDAuOCAxOS44IDAgMzguNy02LjMgNTQuNC0xOC4ybDE1LjUgMTguN2MzLjYgNC4zIDguMyA3LjUgMTMuNSA5LjIgNS4xIDEuNyAxMC42IDIuMSAxNS45IDEuMiA2LjItMS4xIDEyLTQuMyAxNi4yLTkuMiA0LjMtNC45IDYuNy0xMS4yIDYuNy0xNy44IDAtOS45LTYuNC0xOC41LTE1LjctMjEuNy00LjgtMS42LTkuMS00LjYtMTIuNC04LjYtMy44LTQuNi02LjItMTAuMy02LjItMTYuNCAwLTE0IDEyLjQtMjUuMiAyNy4yLTI1LjIgMTQuOCAwIDI3LjIgMTEuMiAyNy4yIDI1LjIgMCA2LjItMi40IDExLjgtNi4yIDE2LjRsLTE1LjUgMTguN2MxMS4xIDguNSAyNC4yIDEzLjUgMzcuOSAxMy41IDIyLjcgMCA0My4xLTEyLjIgNTQuNy0zMS40IDExLjUtMTkuMiAxMS41LTQyLjkgMC02Mi4xLTE1LjItMjUuMy00Mi41LTQwLjgtNzEuNy00MC44LTE5LjggMC0zOC43IDYuMy01NC40IDE4LjJ6Ii8+PC9zdmc+" alt="imToken">
+                <div class="footer-text">
                     <h4>imToken</h4>
                     <p>https://token.im</p>
                 </div>
             </div>
+            
             <div class="footer-qr">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://token.im&margin=0" alt="固定二维码">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://token.im&margin=0" alt="固定二维码" crossorigin="anonymous">
             </div>
         </div>
     </div>
@@ -168,44 +176,56 @@
         const saveBtn = document.getElementById('saveBtn');
         const cardCapture = document.getElementById('cardCapture');
 
+        // 生成大二维码
         function generateMainQRCode(text) {
             if (!text) return;
             mainQrContainer.innerHTML = '';
             new QRCode(mainQrContainer, {
-                text: text, width: 220, height: 220, colorDark : "#000000", colorLight : "#ffffff", correctLevel : QRCode.CorrectLevel.H
+                text: text, 
+                width: 220, 
+                height: 220, 
+                colorDark : "#000000", 
+                colorLight : "#ffffff", 
+                correctLevel : QRCode.CorrectLevel.H
             });
+            // 保证二维码居中
             mainQrContainer.style.display = 'flex';
             mainQrContainer.style.justifyContent = 'center';
             mainQrContainer.style.alignItems = 'center';
         }
 
+        // 监听输入更新内容
         document.getElementById('qrContentInput').addEventListener('input', (e) => generateMainQRCode(e.target.value.trim()));
-        document.getElementById('addressInput').addEventListener('input', (e) => { document.getElementById('displayAddress').innerText = e.target.value.trim(); });
+        document.getElementById('addressInput').addEventListener('input', (e) => { 
+            document.getElementById('displayAddress').innerText = e.target.value.trim(); 
+        });
 
-        // 使用 html-to-image 进行截图
+        // 截图并保存 (使用 html-to-image 保证 SVG 内嵌图片不会变形)
         saveBtn.addEventListener('click', function() {
             const originalText = saveBtn.innerText;
-            saveBtn.innerText = '正在生成...';
+            saveBtn.innerText = '正在生成图片...';
             saveBtn.disabled = true;
 
-            // pixelRatio: 4 表示4倍高清
+            // pixelRatio: 4 保证生成的图片非常高清
             htmlToImage.toPng(cardCapture, { pixelRatio: 4, backgroundColor: null })
                 .then(function (dataUrl) {
                     const link = document.createElement('a');
-                    link.download = 'Tron_完美复刻.png';
+                    link.download = 'Tron_完美收款卡片.png';
                     link.href = dataUrl;
                     link.click();
+                    
                     saveBtn.innerText = originalText;
                     saveBtn.disabled = false;
                 })
                 .catch(function (error) {
                     console.error('截图失败:', error);
-                    alert('生成失败，请重试。');
+                    alert('生成失败，请确保网络畅通并重试。');
                     saveBtn.innerText = originalText;
                     saveBtn.disabled = false;
                 });
         });
 
+        // 页面加载时默认生成
         window.onload = () => {
             generateMainQRCode(document.getElementById('qrContentInput').value);
         };
