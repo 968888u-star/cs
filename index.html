@@ -3,27 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>imToken 收款码生成器</title>
-    <!-- 引入用于生成二维码的库 -->
+    <title>imToken 完美复刻生成器</title>
+    <!-- 引入生成二维码的库 -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- 引入截图保存图片的库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
-            --primary-blue: #007bff; /* 外框和底部蓝色 */
+            --theme-blue: #0076FF;
             --card-bg: #ffffff;
-            --text-main: #333333;
-            --text-sub: #888888;
-            --tron-red: #ff5e5e;
+            --text-main: #1A1A1A;
+            --text-sub: #8E8E93;
+            --tron-red: #FF5A5A;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", Arial, sans-serif;
         }
 
         body {
-            background-color: #f0f2f5;
+            background-color: #f4f5f7;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -31,122 +33,147 @@
             min-height: 100vh;
         }
 
-        /* 顶部控制区 */
+        /* ===== 控制面板 ===== */
         .control-panel {
             background: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
             width: 100%;
             max-width: 400px;
-            text-align: center;
+            z-index: 10;
         }
 
-        .control-panel input {
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .form-group input {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             border: 1px solid #ddd;
-            border-radius: 6px;
+            border-radius: 8px;
             font-size: 14px;
-            margin-bottom: 10px;
+            outline: none;
+            transition: border-color 0.2s;
         }
 
-        .control-panel p {
-            font-size: 12px;
-            color: #666;
-            line-height: 1.5;
+        .form-group input:focus {
+            border-color: var(--theme-blue);
         }
 
-        /* 核心卡片样式（复刻图片） */
-        .card-wrapper {
-            background-color: var(--primary-blue);
+        .save-btn {
             width: 100%;
-            max-width: 400px;
-            border-radius: 20px;
-            padding: 15px;
+            background-color: var(--theme-blue);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            transition: opacity 0.2s;
+        }
+
+        .save-btn:active { opacity: 0.8; }
+        .save-btn:disabled { background-color: #999; cursor: not-allowed; }
+
+        /* ===== 核心卡片区域 ===== */
+        .card-wrapper {
+            background-color: var(--theme-blue);
+            width: 100%;
+            max-width: 420px;
+            border-radius: 28px;
+            padding: 16px;
             position: relative;
-            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,118,255,0.2);
         }
 
         .white-card {
             background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 25px 15px 20px;
+            border-radius: 20px;
+            padding: 35px 20px 30px;
             text-align: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 15px; /* 给底部留空间 */
+            margin-bottom: 24px;
         }
 
-        /* Tron 标志 */
         .tron-badge {
             display: inline-flex;
             align-items: center;
-            border: 1px solid #eee;
-            border-radius: 20px;
-            padding: 4px 12px;
-            margin-bottom: 12px;
+            border: 1px solid #E5E5EA;
+            border-radius: 24px;
+            padding: 6px 16px;
+            margin-bottom: 20px;
         }
 
         .tron-icon {
-            width: 18px;
-            height: 18px;
+            width: 22px;
+            height: 22px;
             background-color: var(--tron-red);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-right: 6px;
+            margin-right: 8px;
         }
 
-        .tron-icon svg {
-            width: 10px;
-            height: 10px;
-            fill: white;
-        }
+        .tron-icon svg { width: 12px; height: 12px; fill: white; }
 
         .tron-badge span {
-            font-size: 14px;
+            font-size: 16px;
             color: var(--text-main);
+            font-weight: 500;
         }
 
-        /* 提示文字 */
         .subtitle {
-            font-size: 14px;
+            font-size: 16px;
             color: var(--text-sub);
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
         }
 
-        /* 二维码容器 */
+        /* 大二维码容器 */
         .qr-box {
-            border: 1px solid #f0f0f0;
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 20px;
+            border: 1px solid #F2F2F7;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 30px;
             background: #fff;
+            width: 260px;
+            height: 260px;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            width: 240px;
-            height: 240px;
         }
 
-        /* 钱包地址 */
         .address-label {
-            font-size: 13px;
+            font-size: 15px;
             color: var(--text-sub);
-            margin-bottom: 6px;
+            margin-bottom: 10px;
         }
 
         .address-text {
-            font-size: 15px;
+            font-size: 17px;
             color: var(--text-main);
-            font-weight: 500;
+            font-weight: 600;
             word-break: break-all;
-            line-height: 1.4;
+            line-height: 1.5;
             padding: 0 10px;
         }
 
@@ -155,7 +182,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 5px 10px;
+            padding: 0 10px 10px 15px;
             color: #fff;
         }
 
@@ -165,29 +192,42 @@
         }
 
         .footer-logo {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
+            width: 36px;
+            height: 36px;
+            margin-right: 12px;
             fill: #fff;
         }
 
         .footer-text h4 {
-            font-size: 16px;
+            font-size: 20px;
             font-weight: 500;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
         }
 
         .footer-text p {
-            font-size: 12px;
-            opacity: 0.8;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 0.5px;
         }
 
+        /* 右下角小二维码外框 (固定不变) */
         .footer-qr {
             background: #fff;
-            padding: 3px;
+            padding: 4px;
+            border-radius: 8px;
+            width: 54px;
+            height: 54px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .footer-qr img {
+            width: 100%;
+            height: 100%;
+            display: block;
             border-radius: 4px;
-            width: 45px;
-            height: 45px;
         }
     </style>
 </head>
@@ -195,8 +235,19 @@
 
     <!-- 控制面板 -->
     <div class="control-panel">
-        <input type="text" id="urlInput" placeholder="请在这里粘贴您的支付网址 (http://...)" value="https://github.com/968888u-star/waimaidaifu">
-        <p>👆 输入网址后，下方二维码会自动更新。<br>在手机端直接截图即可保存最终卡片。</p>
+        <div class="form-group">
+            <label>中间大二维码内容 (扫码跳转的网址)</label>
+            <input type="text" id="qrContentInput" placeholder="输入您的支付网址" value="https://cs-8kc.pages.dev">
+        </div>
+        <div class="form-group">
+            <label>卡片显示的收款地址</label>
+            <input type="text" id="addressInput" placeholder="输入 Tron 钱包地址" value="TLsgrS8KPwtmVWx3YZiWQ5hcRRUfkxGBo1">
+        </div>
+        
+        <button class="save-btn" id="saveBtn">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            保存为高清图片
+        </button>
     </div>
 
     <!-- 生成的卡片区域 -->
@@ -212,85 +263,99 @@
 
             <p class="subtitle">仅支持 Tron 资产 (TRC10/TRC20)</p>
 
-            <!-- 大二维码 -->
-            <div class="qr-box" id="mainQrContainer">
-                <!-- 二维码将通过 JS 插入这里 -->
-            </div>
+            <!-- 大二维码 (动态生成) -->
+            <div class="qr-box" id="mainQrContainer"></div>
 
-            <!-- 地址 -->
+            <!-- 地址 (动态生成) -->
             <p class="address-label">钱包地址</p>
-            <p class="address-text">TLsgrS8KPwtmVWx3YZiWQ5hcRRUfkx<br>GBo1</p>
+            <p class="address-text" id="displayAddress">TLsgrS8KPwtmVWx3YZiWQ5hcRRUfkxGBo1</p>
         </div>
 
-        <!-- 底部 -->
+        <!-- 底部 imToken 栏 -->
         <div class="footer-bar">
             <div class="footer-left">
                 <svg class="footer-logo" viewBox="0 0 100 100">
-                    <!-- 简易的 imToken 叶子 Logo -->
-                    <path d="M50 10 C20 40, 10 70, 40 90 C60 100, 90 80, 80 50 C70 30, 50 10, 50 10 Z"/>
+                    <path d="M 45,15 C 30,15 15,30 15,50 C 15,70 30,85 50,85 C 70,85 85,70 85,50 C 85,38 78,28 68,22 C 72,28 75,35 75,45 C 75,60 63,72 48,72 C 33,72 25,60 25,45 C 25,30 35,25 45,15 Z"/>
                 </svg>
                 <div class="footer-text">
                     <h4>imToken</h4>
                     <p>https://token.im</p>
                 </div>
             </div>
-            <!-- 右下角小二维码 -->
-            <div class="footer-qr" id="smallQrContainer">
-                <!-- 小二维码将通过 JS 插入这里 -->
+            
+            <!-- 右下角小二维码 (写死，固定不变) -->
+            <div class="footer-qr">
+                <!-- 这里放了一张 imToken 官方二维码，也可以用您自己固定的二维码图片替换 src 里的链接 -->
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://token.im" alt="固定二维码">
             </div>
         </div>
     </div>
 
     <script>
-        // 获取 DOM 元素
-        const urlInput = document.getElementById('urlInput');
+        const qrContentInput = document.getElementById('qrContentInput');
+        const addressInput = document.getElementById('addressInput');
+        const displayAddress = document.getElementById('displayAddress');
         const mainQrContainer = document.getElementById('mainQrContainer');
-        const smallQrContainer = document.getElementById('smallQrContainer');
+        const saveBtn = document.getElementById('saveBtn');
+        const cardCapture = document.getElementById('cardCapture');
 
-        // 初始化并生成二维码
-        function generateQRCode(url) {
-            if (!url) return;
-
-            // 清空之前的二维码
+        // 只生成中间的大二维码
+        function generateMainQRCode(text) {
+            if (!text) return;
             mainQrContainer.innerHTML = '';
-            smallQrContainer.innerHTML = '';
 
-            // 生成大二维码 (尺寸 200x200)
             new QRCode(mainQrContainer, {
-                text: url,
-                width: 200,
-                height: 200,
+                text: text,
+                width: 256, 
+                height: 256,
                 colorDark : "#000000",
                 colorLight : "#ffffff",
                 correctLevel : QRCode.CorrectLevel.H
             });
-
-            // 生成右下角小二维码 (尺寸 40x40)
-            new QRCode(smallQrContainer, {
-                text: url,
-                width: 40,
-                height: 40,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.L
-            });
+            
+            mainQrContainer.style.display = 'flex';
+            mainQrContainer.style.justifyContent = 'center';
+            mainQrContainer.style.alignItems = 'center';
         }
 
-        // 监听输入框变化，实时更新二维码
-        urlInput.addEventListener('input', function(e) {
-            let url = e.target.value.trim();
-            if (url) {
-                // 如果用户没加 http，帮他补上（防止二维码生成太单调或扫不出）
-                if (!/^https?:\/\//i.test(url)) {
-                    url = 'http://' + url;
-                }
-                generateQRCode(url);
-            }
+        // 监听输入
+        qrContentInput.addEventListener('input', (e) => generateMainQRCode(e.target.value.trim()));
+        addressInput.addEventListener('input', (e) => {
+            displayAddress.innerText = e.target.value.trim();
         });
 
-        // 页面加载时默认生成一次（使用输入框的默认值）
-        window.onload = function() {
-            generateQRCode(urlInput.value);
+        // 截图保存
+        saveBtn.addEventListener('click', function() {
+            const originalText = saveBtn.innerHTML;
+            saveBtn.innerHTML = '正在生成...';
+            saveBtn.disabled = true;
+
+            html2canvas(cardCapture, {
+                scale: 4, // 4倍高清
+                useCORS: true,
+                backgroundColor: null, 
+                logging: false
+            }).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const link = document.createElement('a');
+                link.download = 'Tron_收款卡片.png';
+                link.href = imgData;
+                link.click();
+
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+            }).catch(err => {
+                console.error('截图失败:', err);
+                alert('生成失败，请重试。');
+                saveBtn.innerHTML = originalText;
+                saveBtn.disabled = false;
+            });
+        });
+
+        // 初始化
+        window.onload = () => {
+            generateMainQRCode(qrContentInput.value);
+            displayAddress.innerText = addressInput.value;
         };
     </script>
 </body>
