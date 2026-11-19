@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>职业技能等级证书查询</title>
+    <title>国家技能人才评价证书查询</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -71,19 +71,19 @@
         .info-list span {
             color: #666;
         }
+        /* 照片占位框 */
         .photo-box {
             width: 80px;
             height: 110px;
-            background-color: #e0e0e0;
-            border: 1px solid #ccc;
+            border: 1px dashed #999;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 12px;
             color: #999;
             margin-left: 15px;
-            /* 这里用纯色模拟照片区域 */
-            background-image: linear-gradient(135deg, #74ebd5 0%, #9face6 100%);
+            background-color: #fafafa;
+            text-align: center;
         }
         .detail-row {
             display: flex;
@@ -122,13 +122,15 @@
             color: #e53935;
             font-weight: bold;
         }
+        
+        /* 模拟复杂的长印章 */
         .seal {
             position: absolute;
-            bottom: 60px;
-            right: 20px;
-            width: 120px;
-            height: 120px;
-            border: 4px solid rgba(220, 20, 60, 0.6);
+            bottom: 20px;
+            right: 10px;
+            width: 140px;
+            height: 140px;
+            border: 3px solid rgba(220, 20, 60, 0.6);
             border-radius: 50%;
             color: rgba(220, 20, 60, 0.6);
             display: flex;
@@ -136,19 +138,22 @@
             justify-content: center;
             text-align: center;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 9px;
             transform: rotate(-15deg);
             pointer-events: none;
+            padding: 5px;
+            box-sizing: border-box;
         }
         .seal-inner {
             border: 1px solid rgba(220, 20, 60, 0.6);
             border-radius: 50%;
-            width: 90px;
-            height: 90px;
+            width: 120px;
+            height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 5px;
+            line-height: 1.2;
         }
         .footer {
             text-align: center;
@@ -156,6 +161,7 @@
             color: #999;
             padding: 20px;
             line-height: 1.5;
+            margin-bottom: 80px; /* 给印章留空间 */
         }
     </style>
 </head>
@@ -169,12 +175,13 @@
         <div class="content">
             <div class="top-section">
                 <div class="info-list">
-                    <div><span>姓 名：</span><strong>李冲冲</strong></div>
+                    <div><span>姓 名：</span><strong>郭元胜</strong></div>
                     <div><span>性 别：</span><strong>男</strong></div>
-                    <div><span>出生日期：</span><strong>2003年01月12日</strong></div>
-                    <div><span>证件号码：</span><strong>410***********05</strong></div>
+                    <div><span>出生日期：</span><strong>1999年11月16日</strong></div>
+                    <!-- 正规网站身份证号是脱敏的 -->
+                    <div><span>证件号码：</span><strong>5113**********19</strong></div>
                 </div>
-                <div class="photo-box">证件照</div>
+                <div class="photo-box">照片到时候<br>自己贴</div>
             </div>
 
             <div class="detail-row">
@@ -187,28 +194,29 @@
             </div>
             <div class="detail-row">
                 <div class="detail-label">发证日期</div>
-                <div class="detail-value">2023年08月20日</div>
+                <div class="detail-value">2020年11月22日</div>
             </div>
             <div class="detail-row">
                 <div class="detail-label">发证机构</div>
-                <div class="detail-value">职业技能鉴定(指导)中心</div>
+                <div class="detail-value" style="font-size: 12px;">中国人民武装警察部队贵州省总队政治工作部人力资源处</div>
             </div>
 
             <div class="score-box">
                 <div class="score-item">
                     <span>理论知识考试成绩</span>
-                    <span class="score-value">92.00</span>
+                    <span class="score-value">95.00</span>
                 </div>
                 <div class="score-item">
                     <span>技能考核成绩</span>
-                    <span class="score-value">74.50</span>
+                    <!-- 如果8是笔误，自己在这里改数字 -->
+                    <span class="score-value">8.00</span> 
                 </div>
             </div>
             
-            <!-- 模拟红色印章 -->
+            <!-- 模拟印章 -->
             <div class="seal">
                 <div class="seal-inner">
-                    职业技能<br>鉴定中心<br>(印)
+                    中国人民武装警察部队<br>贵州省总队政治工作部<br>人力资源处<br>职业技能鉴定专用章
                 </div>
             </div>
 
@@ -218,7 +226,7 @@
     <div class="footer">
         数据来源：职业技能等级评价机构<br>
         查询时间：2023-10-27 17:04:00<br>
-        <em>(注：此页面为根据图片信息生成的模拟演示页面)</em>
+        <em>(注：此页面为根据提供的图片及信息生成的模拟演示页面，仅作排版参考)</em>
     </div>
 
 </body>
