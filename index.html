@@ -5,229 +5,105 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>国家技能人才评价证书查询</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        .header {
-            background-color: #0056b3;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            font-size: 18px;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .card {
-            background: white;
-            margin: 15px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            overflow: hidden;
-            position: relative;
-        }
-        .status-banner {
-            background-color: #e8f5e9;
-            color: #2e7d32;
-            text-align: center;
-            padding: 15px;
-            font-weight: bold;
-            font-size: 18px;
-            border-bottom: 1px solid #c8e6c9;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .status-banner::before {
-            content: "✔";
-            display: inline-block;
-            background: #2e7d32;
-            color: white;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            line-height: 24px;
-            margin-right: 10px;
-            font-size: 14px;
-        }
-        .content {
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-        .top-section {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-        }
-        .info-list {
-            flex: 1;
-            font-size: 14px;
-            line-height: 2;
-        }
-        .info-list span {
-            color: #666;
-        }
-        /* 照片占位框 */
-        .photo-box {
-            width: 80px;
-            height: 110px;
-            border: 1px dashed #999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: #999;
-            margin-left: 15px;
-            background-color: #fafafa;
-            text-align: center;
-        }
-        .detail-row {
-            display: flex;
-            border-bottom: 1px dashed #eee;
-            padding: 10px 0;
-            font-size: 14px;
-        }
-        .detail-row:last-child {
-            border-bottom: none;
-        }
-        .detail-label {
-            width: 100px;
-            color: #666;
-        }
-        .detail-value {
-            flex: 1;
-            font-weight: bold;
-            color: #222;
-        }
-        .score-box {
-            background: #f9f9f9;
-            border-radius: 6px;
-            padding: 15px;
-            margin-top: 15px;
-        }
-        .score-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-        .score-item:last-child {
-            margin-bottom: 0;
-        }
-        .score-value {
-            color: #e53935;
-            font-weight: bold;
-        }
-        
-        /* 模拟复杂的长印章 */
-        .seal {
-            position: absolute;
-            bottom: 20px;
-            right: 10px;
-            width: 140px;
-            height: 140px;
-            border: 3px solid rgba(220, 20, 60, 0.6);
-            border-radius: 50%;
-            color: rgba(220, 20, 60, 0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-weight: bold;
-            font-size: 9px;
-            transform: rotate(-15deg);
-            pointer-events: none;
-            padding: 5px;
-            box-sizing: border-box;
-        }
-        .seal-inner {
-            border: 1px solid rgba(220, 20, 60, 0.6);
-            border-radius: 50%;
-            width: 120px;
-            height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 5px;
-            line-height: 1.2;
-        }
-        .footer {
-            text-align: center;
-            font-size: 12px;
-            color: #999;
-            padding: 20px;
-            line-height: 1.5;
-            margin-bottom: 80px; /* 给印章留空间 */
-        }
+        body { font-family: -apple-system, sans-serif; background-color: #f4f6f9; margin: 0; padding: 0; color: #333; }
+        .header { background-color: #0056b3; color: white; text-align: center; padding: 15px; font-size: 18px; font-weight: bold; }
+        .card { background: white; margin: 15px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; position: relative; min-height: 500px; }
+        .status-banner { background-color: #e8f5e9; color: #2e7d32; text-align: center; padding: 15px; font-weight: bold; font-size: 18px; border-bottom: 1px solid #c8e6c9; }
+        .status-banner::before { content: "✔"; background: #2e7d32; color: white; border-radius: 50%; width: 24px; height: 24px; line-height: 24px; display: inline-block; margin-right: 10px; font-size: 14px; text-align: center; }
+        .content { padding: 20px; }
+        .top-section { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .info-list { flex: 1; font-size: 14px; line-height: 2; }
+        .info-list span { color: #666; }
+        .photo-box { width: 85px; height: 115px; border: 1px solid #ccc; margin-left: 15px; object-fit: cover; background: #f0f0f0; }
+        .detail-row { display: flex; border-bottom: 1px dashed #eee; padding: 10px 0; font-size: 14px; }
+        .detail-label { width: 100px; color: #666; }
+        .detail-value { flex: 1; font-weight: bold; color: #222; }
+        .score-box { background: #f9f9f9; border-radius: 6px; padding: 15px; margin-top: 15px; }
+        .score-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 14px; }
+        .score-value { color: #e53935; font-weight: bold; }
+        .seal { position: absolute; bottom: 20px; right: 10px; width: 140px; height: 140px; border: 3px solid rgba(220,20,60,0.6); border-radius: 50%; color: rgba(220,20,60,0.6); display: flex; align-items: center; justify-content: center; text-align: center; font-weight: bold; font-size: 9px; transform: rotate(-15deg); pointer-events: none; padding: 5px; box-sizing: border-box; }
+        .seal-inner { border: 1px solid rgba(220,20,60,0.6); border-radius: 50%; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; padding: 5px; line-height: 1.2; }
+        .footer { text-align: center; font-size: 12px; color: #999; padding: 20px; margin-bottom: 80px; }
+        #loading { text-align: center; padding: 50px; color: #666; }
     </style>
 </head>
 <body>
 
     <div class="header">国家技能人才评价证书查询</div>
 
-    <div class="card">
+    <div id="loading">正在加载证书数据...</div>
+
+    <div class="card" id="mainCard" style="display: none;">
         <div class="status-banner">证书信息真实有效</div>
-        
         <div class="content">
             <div class="top-section">
                 <div class="info-list">
-                    <div><span>姓 名：</span><strong>郭元胜</strong></div>
-                    <div><span>性 别：</span><strong>男</strong></div>
-                    <div><span>出生日期：</span><strong>1999年11月16日</strong></div>
-                    <!-- 正规网站身份证号是脱敏的 -->
-                    <div><span>证件号码：</span><strong>5113**********19</strong></div>
+                    <div><span>姓 名：</span><strong id="disp-name"></strong></div>
+                    <div><span>性 别：</span><strong id="disp-gender"></strong></div>
+                    <div><span>出生日期：</span><strong id="disp-dob"></strong></div>
+                    <div><span>证件号码：</span><strong id="disp-idcard"></strong></div>
                 </div>
-                <div class="photo-box">照片到时候<br>自己贴</div>
+                <!-- 这里默认读取仓库根目录的 photo.jpg -->
+                <img class="photo-box" id="disp-photo" src="./photo.jpg" alt="照片" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='">
             </div>
-
-            <div class="detail-row">
-                <div class="detail-label">职业资格</div>
-                <div class="detail-value">狙击手</div>
-            </div>
-            <div class="detail-row">
-                <div class="detail-label">证书编号</div>
-                <div class="detail-value">2386203043500232</div>
-            </div>
-            <div class="detail-row">
-                <div class="detail-label">发证日期</div>
-                <div class="detail-value">2020年11月22日</div>
-            </div>
-            <div class="detail-row">
-                <div class="detail-label">发证机构</div>
-                <div class="detail-value" style="font-size: 12px;">中国人民武装警察部队贵州省总队政治工作部人力资源处</div>
-            </div>
-
+            <div class="detail-row"><div class="detail-label">职业资格</div><div class="detail-value" id="disp-job"></div></div>
+            <div class="detail-row"><div class="detail-label">证书编号</div><div class="detail-value" id="disp-certNo"></div></div>
+            <div class="detail-row"><div class="detail-label">发证日期</div><div class="detail-value" id="disp-issueDate"></div></div>
+            <div class="detail-row"><div class="detail-label">发证机构</div><div class="detail-value" id="disp-authority" style="font-size: 12px;"></div></div>
             <div class="score-box">
-                <div class="score-item">
-                    <span>理论知识考试成绩</span>
-                    <span class="score-value">95.00</span>
-                </div>
-                <div class="score-item">
-                    <span>技能考核成绩</span>
-                    <!-- 如果8是笔误，自己在这里改数字 -->
-                    <span class="score-value">8.00</span> 
-                </div>
+                <div class="score-item"><span>理论知识考试成绩</span><span class="score-value" id="disp-score1"></span></div>
+                <div class="score-item"><span>技能考核成绩</span><span class="score-value" id="disp-score2"></span></div>
             </div>
-            
-            <!-- 模拟印章 -->
-            <div class="seal">
-                <div class="seal-inner">
-                    中国人民武装警察部队<br>贵州省总队政治工作部<br>人力资源处<br>职业技能鉴定专用章
-                </div>
-            </div>
-
+            <div class="seal"><div class="seal-inner" id="disp-seal"></div></div>
         </div>
     </div>
-
-    <div class="footer">
+    
+    <div class="footer" id="footer" style="display: none;">
         数据来源：职业技能等级评价机构<br>
-        查询时间：2023-10-27 17:04:00<br>
-        <em>(注：此页面为根据提供的图片及信息生成的模拟演示页面，仅作排版参考)</em>
+        查询时间：<span id="disp-time"></span><br>
+        <em>(注：此页面为系统生成)</em>
     </div>
 
+<script>
+    // 页面加载后去读取 data.json
+    window.onload = function() {
+        fetch('./data.json')
+            .then(response => response.json())
+            .then(data => {
+                // 隐藏加载中，显示卡片
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('mainCard').style.display = 'block';
+                document.getElementById('footer').style.display = 'block';
+
+                // 填充数据
+                document.getElementById('disp-name').innerText = data.name;
+                document.getElementById('disp-gender').innerText = data.gender;
+                document.getElementById('disp-dob').innerText = data.dob;
+                
+                // 身份证脱敏 (前4后2)
+                let id = data.idcard;
+                let maskedId = id.length > 6 ? id.substring(0, 4) + "**********" + id.substring(id.length - 2) : id;
+                document.getElementById('disp-idcard').innerText = maskedId;
+
+                document.getElementById('disp-job').innerText = data.job;
+                document.getElementById('disp-certNo').innerText = data.certNo;
+                document.getElementById('disp-issueDate').innerText = data.issueDate;
+                document.getElementById('disp-authority').innerText = data.authority;
+                document.getElementById('disp-score1').innerText = data.score1;
+                document.getElementById('disp-score2').innerText = data.score2;
+                
+                // 渲染印章文字
+                let sealText = data.authority.replace("中国人民武装警察部队", "中国人民武装警察部队<br>") + "<br>职业技能鉴定专用章";
+                document.getElementById('disp-seal').innerHTML = sealText;
+
+                // 显示查询时间
+                document.getElementById('disp-time').innerText = new Date().toLocaleString();
+            })
+            .catch(error => {
+                document.getElementById('loading').innerText = "数据加载失败，请检查 data.json 是否存在。";
+                console.error('Error:', error);
+            });
+    };
+</script>
 </body>
 </html>
